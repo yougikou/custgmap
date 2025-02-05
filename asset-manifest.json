@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/custgmap/static/css/main.fe7b07df.css",
+    "main.js": "/custgmap/static/js/main.4228dcea.js",
+    "index.html": "/custgmap/index.html",
+    "main.fe7b07df.css.map": "/custgmap/static/css/main.fe7b07df.css.map",
+    "main.4228dcea.js.map": "/custgmap/static/js/main.4228dcea.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fe7b07df.css",
+    "static/js/main.4228dcea.js"
+  ]
+}
