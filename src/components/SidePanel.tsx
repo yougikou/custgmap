@@ -65,10 +65,6 @@ const SidePanel: React.FC = () => {
     return (
       <>
         <div className={`service-panel ${showServicePanel ? 'visible' : ''}`}>
-          <div className="service-panel-header">
-            <h3>选择服务</h3>
-            <button className="close-button" onClick={handleClose}>×</button>
-          </div>
           <div className="service-panel-content">
             <ServiceTree
               services={mockServices}
