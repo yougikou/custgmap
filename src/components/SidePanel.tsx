@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './SidePanel.scss';
 import { mockContacts } from '../data/mockContacts.ts';
 import { mockRoutes } from '../data/mockRoutes.ts';
+import { mockServices } from '../data/mockServices.ts';
 import ContactCard from './ContactCard.tsx';
 import RouteDetails from './RouteDetails.tsx';
+import ServiceTree from './ServiceTree.tsx';
 import { Contact } from '../types/contact';
 
-type PanelView = 'contacts' | 'route' | 'details';
+type PanelView = 'contacts' | 'route' | 'details' | 'services';
 
 const SidePanel: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -14,6 +16,8 @@ const SidePanel: React.FC = () => {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [selectedRoute, setSelectedRoute] = useState<number | null>(null);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('left');
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [showServicePanel, setShowServicePanel] = useState(false);
 
   const togglePanel = () => {
     setIsExpanded(!isExpanded);
@@ -33,7 +37,49 @@ const SidePanel: React.FC = () => {
 
   const handleBack = () => {
     setSlideDirection('right');
+    if (currentView === 'services') {
+      setShowServicePanel(false);
+    }
     setCurrentView('contacts');
+  };
+
+  const handleClose = () => {
+    setShowServicePanel(false);
+  }
+
+  const handleServiceSelect = useCallback((code: string) => {
+    setSelectedServices(prev => {
+      const isSelected = prev.includes(code);
+      if (isSelected) {
+        return prev.filter(c => c !== code);
+      }
+      return [...prev, code];
+    });
+  }, []);
+
+  const toggleServicePanel = () => {
+    setShowServicePanel(!showServicePanel);
+  };
+
+  const renderServicePanel = () => {
+    return (
+      <>
+        <div className={`service-panel ${showServicePanel ? 'visible' : ''}`}>
+          <div className="service-panel-header">
+            <h3>选择服务</h3>
+            <button className="close-button" onClick={handleClose}>×</button>
+          </div>
+          <div className="service-panel-content">
+            <ServiceTree
+              services={mockServices}
+              selectedServices={selectedServices}
+              onServiceSelect={handleServiceSelect}
+            />
+          </div>
+        </div>
+        <div className="service-panel-overlay" onClick={handleClose} />
+      </>
+    );
   };
 
   const renderContent = () => {
@@ -93,7 +139,19 @@ const SidePanel: React.FC = () => {
         {isExpanded ? '◀' : '▶'}
       </button>
       <div className="panel-content">
+        <div className="filter-buttons">
+          <button 
+            className="filter-button"
+            onClick={toggleServicePanel}
+          >
+            服务
+            {selectedServices.length > 0 && (
+              <span className="selected-count">{selectedServices.length}</span>
+            )}
+          </button>
+        </div>
         {renderContent()}
+        {renderServicePanel()}
       </div>
     </div>
   );
