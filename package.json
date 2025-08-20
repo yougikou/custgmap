@@ -35,6 +35,6 @@
     "@testing-library/react": "^14.1.2",
     "@testing-library/jest-dom": "^6.2.0",
     "jsdom": "^23.0.1",
-    "playwright": "^1.39.0"
+    "@playwright/test": "^1.39.0"
   }
 }
